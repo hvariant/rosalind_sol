@@ -36,9 +36,9 @@ d = {}
 d[-1,-1] = 0
 p = {}
 for i in range(len(s)):
-    d[i,-1] = 0 #-(i+1)*g
+    d[i,-1] = -(i+1)*g
 for j in range(len(t)):
-    d[-1,j] = 0 #-(j+1)*g
+    d[-1,j] = -(j+1)*g
 
 for i in range(len(s)):
     for j in range(len(t)):
@@ -46,16 +46,16 @@ for i in range(len(s)):
         p[i,j] = 1
 
         if d[i-1,j] - g > d[i,j]:
-            d[i,j] = d[i-1,j] + 1
+            d[i,j] = d[i-1,j] - g
             p[i,j] = 2
 
         if d[i,j-1] - g > d[i,j]:
-            d[i,j] = d[i,j-1] + 1
+            d[i,j] = d[i,j-1] - g
             p[i,j] = 3
+
 
 print(s,t)
 print(d[len(s)-1,len(t)-1])
-print(d)
 
 i = len(s)-1
 j = len(t)-1
@@ -95,6 +95,4 @@ for i in range(len(a1)):
     else:
         ans += scores[a1[i],a2[i]]
 
-print(ans)
-
-
+#print(ans)
