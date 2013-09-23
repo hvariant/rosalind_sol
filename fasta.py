@@ -20,6 +20,23 @@ def read_fasta(f):
 
     return dnas,key_seq
 
+def parse_fasta(s):
+    s = s.strip()
+    lines = s.split()
+    dnas = {}
+    ckey = ""
+    key_seq = []
+
+    for line in lines:
+        if line[0] == ">":
+            ckey = line[1:]
+            key_seq.append(ckey)
+            dnas[ckey] = ""
+        else:
+            dnas[ckey] += line
+
+    return dnas,key_seq
+
 def kmp_preprocess(p):
     m = len(p)
     b = []

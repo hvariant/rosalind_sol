@@ -31,6 +31,17 @@ class Tree:
 
         return ret
 
+    def level_traverse(self,ret=None):
+        if ret == None:
+            ret = []
+
+        for v in self.vs:
+            ret = v.level_traverse(ret)
+
+        ret.append(self.u)
+
+        return ret
+
     def splits(self):
         if len(self.vs) == 0:
             return []
@@ -48,6 +59,24 @@ class Tree:
             ret.append((vt,delta))
 
         return ret
+
+    def adj_list(self,father=None,cur=None,children=None):
+        if cur == None:
+            cur = {}
+        if children == None:
+            children = {}
+        
+        cur[self.u] = set()
+        children[self.u] = set()
+        if father != None:
+            cur[self.u].add(father)
+
+        for v in self.vs:
+            cur,children = v.adj_list(father=self.u,cur=cur,children=children)
+            cur[self.u].add(v.u)
+            children[self.u].add(v.u)
+
+        return cur,children
 
 def newick_parse(s):
     def S():
@@ -97,8 +126,7 @@ def newick_parse(s):
     S.pos = 0
     return S()
 
-def distance(s,x,y):
-    tree = newick_parse(s)
+def distance_tree(tree,x,y):
     _,p1 = tree.distance(x)
     _,p2 = tree.distance(y)
 
@@ -120,6 +148,24 @@ def distance(s,x,y):
         r = (len(p1)-1) + (len(p2)-1) - 2*i
 
     return r,p1,p2,i
+
+def distance(s,x,y):
+    tree = newick_parse(s)
+
+    return distance_tree(tree,x,y)
+
+def newick_tree_to_distance_matrix(tree):
+    taxa = list(tree.taxa())
+    d = {}
+
+    for i in range(len(taxa)):
+        for j in range(i+1,len(taxa)):
+            d[taxa[i],taxa[j]] = d[taxa[j],taxa[i]] = distance_tree(tree,taxa[i],taxa[j])[0]
+
+    for taxon in taxa:
+        d[taxon,taxon] = 0
+
+    return d,taxa
 
 def distance_using_nw_distance(s,x,y):
     with open("sample.nwc","w") as f:
