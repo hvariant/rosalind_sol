@@ -2,7 +2,7 @@ import fasta
 import newick
 from pdb import set_trace
 
-INF = 10000000
+INF = 100000000000
 
 with open("rosalind_alph.txt") as f:
     nw = f.readline()
@@ -14,6 +14,8 @@ dnas,key = fasta.parse_fasta(fst)
 
 adj_list,children = tree.adj_list()
 ordered = tree.level_traverse()
+
+assert(set(ordered) == set(tree.taxa()))
 
 internal = []
 for taxon in ordered:
@@ -37,7 +39,7 @@ for taxon in ordered:
 dp = {}
 pre = {}
 L = len(dnas[key[0]])
-alphabet = "ATGC"
+alphabet = "ATGC-"
 
 for k in range(L):
     dp[k] = {}
