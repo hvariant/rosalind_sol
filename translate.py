@@ -27,15 +27,17 @@ def translate(s,type="DNA"):
         rna = s
 
     protein = ""
+    complete = False
     for i in range(len(rna)/3):
         if 3*i + 3 <= len(rna):
             amino = table[rna[3*i:3*i+3]]
             if amino == "Stop":
+                complete = True
                 break
 
             protein += amino
-
-    return protein
+    
+    return protein,complete
 
 
 ##print("the codon table")

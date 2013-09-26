@@ -177,10 +177,7 @@ def distance_using_nw_distance(s,x,y):
 
     return int(ret)
 
-def edge_splits(t):
-    taxa = list(t.taxa())
-    taxa.sort()
-
+def edge_splits(t,taxa):
     splits = t.splits()
     splits = filter(lambda x:len(x[0]) != 1 and len(x[1]) != 1, splits)
 
@@ -196,12 +193,6 @@ def edge_splits(t):
         ret.append(s)
 
     return ret
-
-
-    
-
-
-
 
 #output = ""
 #with open("rosalind_nwck.txt","r") as f:

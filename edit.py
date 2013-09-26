@@ -23,7 +23,7 @@ def read_blosum62():
 
     return scores
 
-infile = "rosalind_glob.txt"
+infile = "sample.txt"
 scores = read_blosum62()
 g = 5
 
