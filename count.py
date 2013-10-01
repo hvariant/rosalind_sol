@@ -5,6 +5,7 @@ import re
 import math
 import string
 from pdb import set_trace
+import time
 
 #infile = sys.argv[1]
 
@@ -161,18 +162,43 @@ from pdb import set_trace
 
 #n = 6
 
-#def generate_perm(A):
-    #if len(A) == 0:
-        #return [[]]
+count = 0
+perm = []
+starttime = time.time()
 
-    #ret = []
-    #for a in A:
-        #A.remove(a)
-        #r = generate_perm(A)
-        #ret += [[a] + s for s in r]
-        #A.add(a)
+def gen_sign_and_output():
+    n = len(perm)
 
-    #return ret
+    def iter(i):
+        if i == n:
+            return [[]]
+        
+        r = iter(i+1)
+        return [ perm[i:i+1] + x for x in r ] + [ [-perm[i]] + x for x in r]
+    
+    ps = iter(0)
+    for p in ps:
+        print(" ".join([str(x) for x in p]))
+
+
+def generate_perm(A):
+    global count,perm
+
+    if len(A) == 0:
+        count += 1
+        if count % 10000 == 0:
+            sys.stderr.write("%d\t%s\n" % (count,str(time.time() - starttime)))
+
+        gen_sign_and_output()
+
+        return
+
+    for a in A:
+        A.remove(a)
+        perm.append(a)
+        generate_perm(A)
+        perm.pop()
+        A.add(a)
 
 #r = generate_perm(set(range(1,n+1)))
 #print(len(r))
@@ -411,3 +437,19 @@ from pdb import set_trace
 
 
 #print(d[len(s)-1,len(t)-1])
+
+#===========================================
+n = int(sys.argv[1])
+sys.stderr.write("n=%d\n" % n)
+
+def fac(n):
+    r = 1
+    while n != 0:
+        r *= n
+        n -= 1
+
+    return r
+
+print(fac(n)*(2**n))
+generate_perm(set(range(1,n+1)))
+

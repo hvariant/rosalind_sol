@@ -31,6 +31,14 @@ class Tree:
 
         return ret
 
+    def nodes(self):
+        ret = set([self])
+
+        for v in self.vs:
+            ret = ret.union(v.nodes())
+
+        return ret
+
     def level_traverse(self,ret=None):
         if ret == None:
             ret = []
@@ -77,6 +85,40 @@ class Tree:
             children[self.u].add(v.u)
 
         return cur,children
+
+    def find_rev(self,dnas,pos,pre=None,mid=None):
+        #print("find_rev:self=%s,pos=%d,pre=%s,mid=%s"
+              #% (self.u,pos+1,str(pre),str(mid)))
+        if pre == None:
+            ret = []
+            for v in self.vs:
+                ret += v.find_rev(dnas,pos,dnas[self.u][pos],None)
+
+            return ret
+
+        elif mid == None:
+            if dnas[self.u][pos] != pre:
+                ret = []
+                for v in self.vs:
+                    ret += [[self] + path for path in v.find_rev(dnas,pos,pre,dnas[self.u][pos])]
+
+                return ret
+            else:
+                #print("")
+                return []
+
+        else:
+            if dnas[self.u][pos] == pre:
+                #print("")
+                return [[self]]
+            elif dnas[self.u][pos] == mid:
+                ret = []
+                for v in self.vs:
+                    ret += [[self] + path for path in v.find_rev(dnas,pos,pre,mid)]
+                return ret
+            else:
+                #print("")
+                return []
 
 def newick_parse(s):
     def S():

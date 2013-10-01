@@ -49,6 +49,8 @@ class Node:
         return ret
     
     def split(self,cat):
+        global internals
+
         branches = set()
         bcat = set()
 
@@ -94,7 +96,10 @@ class Node:
 
 
 def initialize(taxa):
+    global internals
+
     root = Node()
+    internals = []
 
     internals.append(root)
     for taxon in taxa:
@@ -112,7 +117,7 @@ def split(char,taxa):
             success = True
             break
 
-    assert(success)
+    return success
 
 #utils
 def invert(s):
@@ -135,33 +140,42 @@ def gen_char(cat,taxa):
 
     return ret
 
-with open(infile,"r") as f:
-    line = f.readline()
-    line = line.strip()
-    taxa = line.split()
-
+def consistent(chars,taxa):
     initialize(taxa)
-    #print(taxa)
 
-    chars = []
-
-    char = f.readline()
-    char = char.strip()
-    while char != "":
-        split(char,taxa)
-        chars.append(char)
-
-        char = f.readline()
-        char = char.strip()
-
-        #print("="*10)
-
-    r = internals.pop()
-    ans = r.fold() + ";"
-
-    t = newick.newick_parse(ans)
-    r = newick.edge_splits(t,taxa)
     for char in chars:
-        assert(char in r or invert(char) in r)
+        if not split(char,taxa):
+            return False
 
-    print(ans)
+    return True
+
+#with open(infile,"r") as f:
+    #line = f.readline()
+    #line = line.strip()
+    #taxa = line.split()
+
+    #initialize(taxa)
+    ##print(taxa)
+
+    #chars = []
+
+    #char = f.readline()
+    #char = char.strip()
+    #while char != "":
+        #split(char,taxa)
+        #chars.append(char)
+
+        #char = f.readline()
+        #char = char.strip()
+
+        ##print("="*10)
+
+    #r = internals.pop()
+    #ans = r.fold() + ";"
+
+    #t = newick.newick_parse(ans)
+    #r = newick.edge_splits(t,taxa)
+    #for char in chars:
+        #assert(char in r or invert(char) in r)
+
+    #print(ans)
