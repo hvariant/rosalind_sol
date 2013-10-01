@@ -1,6 +1,7 @@
 import fasta
 
 infile = "rosalind_pmch.txt"
+#infile = "rosalind_cat.txt"
 
 with open(infile,"r") as f:
     rnas,key = fasta.read_fasta(f)
@@ -15,5 +16,5 @@ def fac(n):
         return 1
     return n*fac(n-1)
 
-#print(nA,nG)
+print(nA,nG)
 print(fac(nA)*fac(nG))
