@@ -22,7 +22,7 @@ def read_fasta(f):
 
 def parse_fasta(s):
     s = s.strip()
-    lines = s.split()
+    lines = s.split("\n")
     dnas = {}
     ckey = ""
     key_seq = []
